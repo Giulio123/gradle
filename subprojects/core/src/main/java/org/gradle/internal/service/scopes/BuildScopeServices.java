@@ -84,7 +84,10 @@ import org.gradle.cache.CacheRepository;
 import org.gradle.cache.FileLockManager;
 import org.gradle.caching.internal.BuildCacheServices;
 import org.gradle.configuration.BuildOperationFiringProjectsPreparer;
+import org.gradle.configuration.BuildOperationFiringBuildsPreparer;
+import org.gradle.configuration.BuildsPreparer;
 import org.gradle.configuration.CompileOperationFactory;
+import org.gradle.configuration.DefaultBuildsPreparer;
 import org.gradle.configuration.DefaultInitScriptProcessor;
 import org.gradle.configuration.DefaultProjectsPreparer;
 import org.gradle.configuration.DefaultScriptPluginFactory;
@@ -509,6 +512,10 @@ public class BuildScopeServices extends DefaultServiceRegistry {
             dependencyMetaDataProvider,
             classPathResolver,
             instantiator);
+    }
+
+    protected BuildsPreparer createBuildsPreparer(BuildOperationExecutor buildOperationExecutor, BuildSourceBuilder buildSourceBuilder, BuildStateRegistry buildStateRegistry) {
+        return new BuildOperationFiringBuildsPreparer(buildOperationExecutor, new DefaultBuildsPreparer(buildSourceBuilder, buildStateRegistry));
     }
 
     protected ProjectConfigurer createProjectConfigurer(BuildCancellationToken cancellationToken) {
